@@ -6,7 +6,7 @@ type ButtonProps = {
   isSelected: Boolean;
 };
 
-export const Button: FunctionComponent<PropsWithChildren<ButtonProps>> = ({
+const Button: FunctionComponent<PropsWithChildren<ButtonProps>> = ({
   children = <></>,
   clickHandler = () => {},
   isSelected = false,
@@ -23,3 +23,5 @@ export const Button: FunctionComponent<PropsWithChildren<ButtonProps>> = ({
     </button>
   );
 };
+
+export default Button;

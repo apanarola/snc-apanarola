@@ -5,6 +5,7 @@ type Props = {
 };
 type Context = {
   enableLogs: boolean;
+  timer: string;
   toggleEnableLogs: () => void;
 };
 
@@ -12,6 +13,32 @@ const AppContext = createContext<Context | null>(null);
 
 export const AppContextProvider = ({ children }: Props) => {
   const [enableLogs, setEnableLogs] = useState(false);
+  const [timer, setTimer] = useState("");
+
+  const padStartWithZero = (num: number) => {
+    if (Number(num) <= 9) {
+      let paddedStr = "0" + num.toString();
+      return paddedStr;
+    }
+
+    return num;
+  };
+
+  const formateDateTime = (date: number) => {
+    let givenDate = new Date(date);
+    const dateFormate = `${padStartWithZero(givenDate.getDate())}-${padStartWithZero(givenDate.getMonth())}-${padStartWithZero(givenDate.getFullYear())}`;
+    const timeFormate = `${padStartWithZero(givenDate.getHours())}:${padStartWithZero(givenDate.getMinutes())}:${padStartWithZero(givenDate.getSeconds())}`;
+
+    return dateFormate + " : " + timeFormate;
+  };
+
+  useEffect(() => {
+    let interval = setInterval(() => {
+      setTimer(formateDateTime(Date.now()));
+    }, 1000);
+
+    return () => clearInterval(interval);
+  });
 
   useEffect(() => {
     setEnableLogs(false);
@@ -22,7 +49,7 @@ export const AppContextProvider = ({ children }: Props) => {
   };
 
   return (
-    <AppContext.Provider value={{ enableLogs, toggleEnableLogs }}>
+    <AppContext.Provider value={{ enableLogs, timer, toggleEnableLogs }}>
       {children}
     </AppContext.Provider>
   );
